@@ -6,3 +6,4 @@ apikey.py
 
 # py环境
 .venv/
+__pycache__
