@@ -7,3 +7,6 @@ apikey.py
 # py环境
 .venv/
 __pycache__
+
+# 数据集文件夹
+data/
