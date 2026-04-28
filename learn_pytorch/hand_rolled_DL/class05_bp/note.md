@@ -1,5 +1,9 @@
 # 反向传播算法
 
+> 《鱼书》里第五章最需要认真看的部分：
+> 1. p143页对于sigmoid的求导计算图推导极为精彩!
+> 2. p145页对于矩阵的求导的计算图和推导很重要!
+
 ## 概念
 
 误差的反向传播算法：
@@ -103,5 +107,39 @@ $$ \frac{\partial z}{\partial x} = \frac{\partial z}{\partial t} \frac{\partial 
 
 乘法是类似的，但是注意到一点：实现乘法节点的反向传播时，要 **保存** 正向传播的输入信号。
 
+## 方法对比
 
+误差反向传播法的梯度确认
 
+1. 数值微分算法：计算很耗费时间，数值微分的优点是实现简单，因此，一般情况下不太容易出错。
+2. 误差反向传播：就是计算图，即使存在大量的参数，也可以高效地计算梯度。节省极其大量的时间！
+
+所以，经常会比较数值微分的结果和误差反向传播法的结果，以确认误差反向传播法的实现是否正确。确认数值微分求出的梯度结果和误差反向传播法求出的结果是否一致（严格地讲，是非常相近）的操作称为 **梯度确认（gradient check）** 。
+
+梯度确认的代码实现
+
+```python
+import sys, os
+sys.path.append(os.pardir)
+import numpy as np
+from dataset.mnist import load_mnist
+from two_layer_net import TwoLayerNet
+
+# 读入数据
+(x_train, t_train), (x_test, t_test) =  load_mnist(normalize=True, one_hot_label = True)
+network = TwoLayerNet(input_size=784, hidden_size=50, output_size=10)
+x_batch = x_train[:3]
+t_batch = t_train[:3]
+
+grad_numerical = network.numerical_gradient(x_batch, t_batch)
+grad_backprop = network.gradient(x_batch, t_batch)
+
+# 求各个权重的绝对误差的平均值
+for key in grad_numerical.keys():
+    diff = np.average( np.abs(grad_backprop[key] - grad_numerical[key]) )
+    print(key + ":" + str(diff))
+# 打印出的结果应该是e-11左右的数量级
+```
+
+> 数值微分和误差反向传播法的计算结果之间的误差为 0是很少见的。这是因为计算机的计算精度有限（比如，32位浮点数）。受到数值精
+度的限制，刚才的误差一般不会为 0，但是如果实现正确的话，可以期待这个误差是一个接近 0的很小的值。如果这个值很大，就说明误差反向传播法的实现存在错误。
