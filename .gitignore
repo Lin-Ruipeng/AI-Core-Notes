@@ -19,3 +19,6 @@ dataset/
 
 # AI辅助
 .sisyphus/
+
+# C编译结果
+**/build/
