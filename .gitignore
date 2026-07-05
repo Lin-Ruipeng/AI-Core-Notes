@@ -16,3 +16,6 @@ dataset/
 
 # 模型文件
 *.pth
+
+# AI辅助
+.sisyphus/
