@@ -1,0 +1,14 @@
+{
+    "mcpServers": {
+        "time": {
+            "command": "uv",
+            "args": [
+                "run",
+                "D:/Code/AI-Core-Notes/tiny_skills/Hand_rolled_MCP/time_mcp.py"
+            ],
+            "env": {
+                "TZ": "Asia/Shanghai"
+            }
+        }
+    }
+}
